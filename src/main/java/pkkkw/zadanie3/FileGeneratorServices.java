@@ -1,5 +1,12 @@
 package pkkkw.zadanie3;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,30 +15,44 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
+import com.google.gson.Gson;
 
 @RestController
 public class FileGeneratorServices {
 
     @ResponseBody
     @RequestMapping(value = "/stringInformation", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HashMap<String, Object> checkString(HttpServletRequest request) {
+    public HashMap<String, Object> checkString(HttpServletRequest request) throws IOException {
 
         String ApiUrl ="http://localhost:8080/checkString?stringToCheck=";
         RestTemplate restTemplate = new RestTemplate();
+        HashMap MapAnalisys = restTemplate.getForObject(ApiUrl.concat(request.getParameter("string")),HashMap.class);
+
         if(request.getParameter("format").equals("JSON"))
         {
-            return restTemplate.getForObject(ApiUrl.concat(request.getParameter("string")),HashMap.class);
+            return MapAnalisys;
+        }else if(request.getParameter("format").equals("CSV"))
+        {
+            HashMap<String, Object> map = new HashMap<>();
+            String input = (String) MapAnalisys.get("data");
+            input =  input.replace("Analysis", "");
+            input =  input.replace("{", "");
+            input =  input.replace("}", "");
+            String[] parts = input.split(", ");
+            StringBuilder toReturn = new StringBuilder();
+            for (int i = 0; i < parts.length; i++) {
+                toReturn.append(parts[i]).append(" \n  ");
+            }
+            map.put("data", toReturn.toString());
+            return map;
         }
 
 
 
         return null;
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String cheasdasdackString() {
-       return  "AAAAAA";
     }
 }
 
