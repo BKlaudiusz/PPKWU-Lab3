@@ -20,10 +20,8 @@
 
  **CSV**
  
-   **retrun file**
-    
     {
-      "file":file.csv
+    "data": "upperCase=2 \n  stringToCheck='Where_is-1123!Banana' \n  lowerCase=11 \n  countNumber=4 \n  specialMarks=3 \n  hasCombination=true \n  "
     }
    
       
