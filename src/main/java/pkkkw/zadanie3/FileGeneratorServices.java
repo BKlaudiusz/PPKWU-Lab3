@@ -34,17 +34,30 @@ public class FileGeneratorServices {
         if(request.getParameter("format").equals("JSON"))
         {
             return MapAnalisys;
-        }else if(request.getParameter("format").equals("CSV"))
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        String input = (String) MapAnalisys.get("data");
+        input =  input.replace("Analysis", "");
+        input =  input.replace("{", "");
+        input =  input.replace("}", "");
+        String[] parts = input.split(", ");
+
+        if(request.getParameter("format").equals("CSV"))
         {
-            HashMap<String, Object> map = new HashMap<>();
-            String input = (String) MapAnalisys.get("data");
-            input =  input.replace("Analysis", "");
-            input =  input.replace("{", "");
-            input =  input.replace("}", "");
-            String[] parts = input.split(", ");
             StringBuilder toReturn = new StringBuilder();
             for (int i = 0; i < parts.length; i++) {
                 toReturn.append(parts[i]).append(" \n  ");
+            }
+            map.put("data", toReturn.toString());
+            return map;
+        }else if(request.getParameter("format").equals("XML"))
+        {
+            StringBuilder toReturn = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+
+            for (int i = 0; i < parts.length; i++) {
+                String[] smallPart = parts[i].split("=");
+
+                toReturn.append("<").append(smallPart[0]).append(">").append(smallPart[1]).append("</").append(smallPart[0]).append(">");
             }
             map.put("data", toReturn.toString());
             return map;
