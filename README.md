@@ -13,7 +13,7 @@
       example:
        body{
         "string": "Where_is-1123!Banana,
-        "format": "CSV",
+        "format": "CSV", //available format CSV, JSON, XML
       }
 
 `Response for selected format/stringInformation`
@@ -44,16 +44,12 @@
  Response:
     
     {
-      "file":file.xml
-     }
-   **retrun file**
-   
-    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <Analysis>
+    "data": "
+        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <upperCase>2</upperCase>
-        <stringToCheck>Where_is-1123!Banana</stringToCheck>
+        <stringToCheck>'Where_is-1123!Banana'</stringToCheck>
         <lowerCase>11</lowerCase>
         <countNumber>4</countNumber>
         <specialMarks>3</specialMarks>
-        <hasCombination>true</hasCombination>
-    </Analysis>
+        <hasCombination>true</hasCombination>"
+    }
